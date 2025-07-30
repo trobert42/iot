@@ -1,0 +1,219 @@
+# IoT Project - Inception of Things
+# Fichier .gitignore pour éviter les fichiers générés et temporaires
+
+# ==================== VAGRANT ====================
+# Dossiers Vagrant générés
+.vagrant/
+*.vagrant/
+.vagrant.d/
+
+# Box Vagrant téléchargées
+*.box
+
+# Logs Vagrant
+vagrant.log
+vagrant_log
+
+# Fichiers de configuration Vagrant temporaires
+.vagrant_ssh_config
+
+# ==================== KUBERNETES ====================
+# Fichiers kubeconfig temporaires
+kubeconfig
+kubeconfig.*
+*.kubeconfig
+.kube/config.bak
+
+# Secrets Kubernetes extraits
+*-secret.yaml
+*-secret.yml
+secrets/
+.secrets/
+
+# Fichiers de certificats temporaires
+*.crt
+*.key
+*.pem
+ca-certificates/
+
+# ==================== DOCKER / K3D ====================
+# Volumes Docker
+docker-volumes/
+.docker/
+
+# K3d registries
+k3d-*
+.k3d/
+
+# Images Docker exportées
+*.tar
+*.tar.gz
+docker-images/
+
+# ==================== ARGOCD ====================
+# Mots de passe et tokens Argo CD
+argocd-password.txt
+argocd-token.txt
+.argocd/
+
+# Configurations Argo CD temporaires
+argocd-config/
+.argocd-config/
+
+# ==================== LOGS ET DEBUGGING ====================
+# Logs des applications
+*.log
+logs/
+.logs/
+
+# Fichiers de debug
+debug/
+.debug/
+*.debug
+
+# Dumps et traces
+*.dump
+*.trace
+
+# ==================== SYSTÈME ====================
+# Fichiers système macOS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Fichiers système Linux
+*~
+.nfs*
+
+# Fichiers système Windows
+*.tmp
+*.temp
+Desktop.ini
+
+# ==================== ÉDITEURS ====================
+# Visual Studio Code
+.vscode/
+*.code-workspace
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+*.swp
+*.swo
+*~
+.netrwhist
+
+# Emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+.\#*
+
+# ==================== ENVIRONNEMENT ====================
+# Variables d'environnement
+.env
+.env.local
+.env.*.local
+
+# Fichiers de configuration personnels
+config.local
+*.local
+
+# ==================== BACKUP ET TEMPORAIRES ====================
+# Fichiers de backup
+*.bak
+*.backup
+*.old
+backup/
+backups/
+
+# Fichiers temporaires
+tmp/
+temp/
+.tmp/
+.temp/
+
+# Cache
+cache/
+.cache/
+
+# ==================== RÉSEAU ET MONITORING ====================
+# Fichiers de monitoring
+monitoring/
+grafana-data/
+prometheus-data/
+
+# Certificats SSL/TLS temporaires
+ssl/
+tls/
+certs/
+
+# ==================== SCRIPTS GÉNÉRÉS ====================
+# Scripts générés automatiquement
+generated-scripts/
+auto-generated/
+
+# Fichiers de configuration générés
+*-generated.yaml
+*-generated.yml
+*-auto.yaml
+*-auto.yml
+
+# ==================== DONNÉES PERSISTANTES ====================
+# Données de base de données
+data/
+db/
+database/
+mysql-data/
+postgres-data/
+etcd-data/
+
+# ==================== TESTS ====================
+# Résultats de tests
+test-results/
+coverage/
+.coverage
+*.cover
+
+# Rapports de tests
+reports/
+.reports/
+
+# ==================== DOCUMENTATION GÉNÉRÉE ====================
+# Documentation générée automatiquement
+docs/_build/
+docs/build/
+site/
+
+# ==================== SPÉCIFIQUE AU PROJET ====================
+# Fichiers de démonstration avec données sensibles
+demo-secrets/
+example-passwords.txt
+
+# Configurations spécifiques à l'environnement local
+local-config/
+.local-config/
+
+# Repositories Git temporaires (pour tests GitOps)
+test-repo/
+.test-repo/
+
+# Fichiers de développement personnel
+TODO.md
+NOTES.md
+*.notes

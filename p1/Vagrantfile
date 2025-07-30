@@ -1,0 +1,46 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.ssh.insert_key = false
+  config.vm.box = "ubuntu/focal64"
+  
+  # Configuration commune
+  config.vm.provider "virtualbox" do |vb|
+    vb.memory = "1024"
+    vb.cpus = 1
+  end
+
+  # Serveur K3s
+  config.vm.define "chillionS" do |server|
+    server.vm.hostname = "chillionS"
+    server.vm.network "private_network", ip: "192.168.56.110"
+    
+    server.vm.provider "virtualbox" do |vb|
+      vb.customize ["modifyvm", :id, "--name", "chillionS"]
+    end
+
+    server.vm.provision "shell", path: "scripts/install_k3s_server.sh"
+  end
+
+  # Agent K3s
+  config.vm.define "chillionSW" do |agent|
+    agent.vm.hostname = "chillionSW"
+    agent.vm.network "private_network", ip: "192.168.56.111"
+    
+    agent.vm.provider "virtualbox" do |vb|
+      vb.customize ["modifyvm", :id, "--name", "chillionSW"]
+    end
+
+    agent.vm.provision "file", 
+      source: "~/.vagrant.d/insecure_private_key", 
+      destination: "/home/vagrant/.ssh/id_rsa"
+    agent.vm.provision "shell", inline: <<-SHELL
+      chmod 600 /home/vagrant/.ssh/id_rsa
+      echo "Host 192.168.56.110" >> /home/vagrant/.ssh/config
+      echo "  StrictHostKeyChecking no" >> /home/vagrant/.ssh/config
+      echo "  UserKnownHostsFile /dev/null" >> /home/vagrant/.ssh/config
+    SHELL
+    agent.vm.provision "shell", path: "scripts/install_k3s_agent.sh"
+  end
+end
