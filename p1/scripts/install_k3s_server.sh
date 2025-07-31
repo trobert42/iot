@@ -12,7 +12,7 @@ ufw allow 22/tcp
 # Installation de K3s en mode server (controller mode)
 curl -sfL https://get.k3s.io | sh -s - server \
   --node-ip 192.168.56.110 \
-  --flannel-iface eth1
+  --flannel-iface enp0s8
 
 # Attendre que K3s soit prêt
 echo "Attente du démarrage de K3s..."
@@ -33,5 +33,12 @@ chmod 600 /home/vagrant/.kube/config
 # Configuration de l'environnement pour vagrant
 echo 'export KUBECONFIG=/home/vagrant/.kube/config' >> /home/vagrant/.bashrc
 
+# Recharger la configuration bash pour l'utilisateur actuel
+export KUBECONFIG=/home/vagrant/.kube/config
+
 echo "K3s server installé avec succès en mode controller"
 echo "Cluster accessible depuis 192.168.56.110:6443"
+
+# Test final
+echo "=== Test de connectivité ==="
+kubectl get nodes -o wide

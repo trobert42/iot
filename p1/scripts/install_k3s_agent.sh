@@ -11,7 +11,7 @@ ufw allow 22/tcp
 
 # Test de connectivité SSH vers le serveur
 echo "Test de connectivité SSH vers le serveur..."
-ssh -i /home/vagrant/.ssh/id_rsa -o StrictHostKeyChecking=no vagrant@192.168.56.110 "exit 0"
+ssh -i /home/vagrant/.ssh/id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR vagrant@192.168.56.110 "exit 0"
 
 # Attendre que le serveur soit prêt
 echo "Attente de la disponibilité du serveur K3s..."
@@ -19,7 +19,7 @@ sleep 15
 
 # Récupération du token depuis le serveur
 echo "Récupération du token K3s..."
-K3S_TOKEN=$(ssh -i /home/vagrant/.ssh/id_rsa vagrant@192.168.56.110 "sudo cat /var/lib/rancher/k3s/server/node-token")
+K3S_TOKEN=$(ssh -i /home/vagrant/.ssh/id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR vagrant@192.168.56.110 "sudo cat /var/lib/rancher/k3s/server/node-token")
 
 if [ -z "$K3S_TOKEN" ]; then
   echo "Erreur: Impossible de récupérer le token K3s"
@@ -35,9 +35,11 @@ curl -sfL https://get.k3s.io | \
   K3S_TOKEN=$K3S_TOKEN \
   sh -s - agent \
   --node-ip 192.168.56.111 \
-  --flannel-iface eth1
+  --flannel-iface enp0s8
 
 # Vérification du statut
+echo "Attente du démarrage de K3s..."
+sleep 30
 systemctl enable k3s-agent
 systemctl status k3s-agent
 
