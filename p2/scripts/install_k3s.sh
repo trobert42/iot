@@ -12,7 +12,7 @@ ufw allow 443/tcp
 ufw allow 22/tcp
 
 # Installation de K3s en mode server
-curl -sfL https://get.k3s.io | sh -s - server --node-ip 192.168.56.110
+curl -sfL https://get.k3s.io | sh -s - server --node-ip 192.168.56.110 --flannel-iface enp0s8
 
 # Attendre que K3s soit prêt
 echo "Attente du démarrage de K3s..."

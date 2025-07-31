@@ -43,4 +43,12 @@ sleep 30
 systemctl enable k3s-agent
 systemctl status k3s-agent
 
+# Configuration de l'environnement pour vagrant
+echo 'export KUBECONFIG=/home/vagrant/.kube/config' >> /home/vagrant/.bashrc
+echo 'alias k=kubectl' >> /home/vagrant/.bashrc
+
+# Recharger la configuration bash pour l'utilisateur actuel
+export KUBECONFIG=/home/vagrant/.kube/config
+export k=kubectl
+
 echo "K3s agent installé avec succès et connecté au cluster"

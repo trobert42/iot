@@ -32,9 +32,11 @@ chmod 600 /home/vagrant/.kube/config
 
 # Configuration de l'environnement pour vagrant
 echo 'export KUBECONFIG=/home/vagrant/.kube/config' >> /home/vagrant/.bashrc
+echo 'alias k=kubectl' >> /home/vagrant/.bashrc
 
 # Recharger la configuration bash pour l'utilisateur actuel
 export KUBECONFIG=/home/vagrant/.kube/config
+export k=kubectl
 
 echo "K3s server installé avec succès en mode controller"
 echo "Cluster accessible depuis 192.168.56.110:6443"

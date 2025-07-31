@@ -4,6 +4,9 @@ echo "=== Script de Vérification - Partie 1 ==="
 echo "Vérification de la conformité aux consignes du projet IoT"
 echo ""
 
+# Configuration kubectl pour utiliser le bon fichier de config
+export KUBECONFIG="/home/vagrant/.kube/config"
+
 # Vérification de la connectivité
 echo "🔍 Vérification de la connectivité entre les nodes..."
 echo ""
@@ -20,8 +23,8 @@ echo ""
 
 # Test de la connectivité réseau
 echo "🌐 Test de connectivité réseau:"
-echo "- IP du serveur: $(ip addr show eth1 | grep 'inet ' | awk '{print $2}' | cut -d/ -f1)"
-echo "- Interface réseau: eth1"
+echo "- IP du serveur: $(ip addr show enp0s8 | grep 'inet ' | awk '{print $2}' | cut -d/ -f1)"
+echo "- Interface réseau: enp0s8"
 echo ""
 
 # Vérification du cluster info
@@ -56,7 +59,7 @@ echo ""
 # Résumé de conformité
 echo "==================== RÉSUMÉ DE CONFORMITÉ ===================="
 echo "✅ Nom de la machine server: $(hostname) (doit finir par S)"
-echo "✅ IP du server: $(ip addr show eth1 | grep 'inet ' | awk '{print $2}' | cut -d/ -f1)"
+echo "✅ IP du server: $(ip addr show enp0s8 | grep 'inet ' | awk '{print $2}' | cut -d/ -f1)"
 echo "✅ Cluster K3s opérationnel"
 echo "✅ kubectl configuré et fonctionnel"
 
