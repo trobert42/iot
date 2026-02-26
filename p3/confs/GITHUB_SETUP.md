@@ -4,7 +4,7 @@
 
 ### 1. Créer un repository GitHub public
 
-- Nom suggéré: `chillion-iot-argocd-app` (ou avec votre login)
+- Nom suggéré: `trobert-iot-argocd-app` (ou avec votre login)
 - Description: "IoT Project - Part 3 - GitOps with Argo CD"
 - Public: ✅
 - README: ✅
@@ -12,7 +12,7 @@
 ### 2. Structure du repository
 
 ```
-chillion-iot-argocd-app/
+trobert-iot-argocd-app/
 ├── deployment.yaml
 ├── service.yaml
 ├── ingress.yaml
@@ -103,8 +103,8 @@ spec:
 
 ```bash
 # Cloner le repository
-git clone https://github.com/USERNAME/chillion-iot-argocd-app.git
-cd chillion-iot-argocd-app
+git clone https://github.com/BekxFR/trobert-iot-argocd-app.git
+cd trobert-iot-argocd-app
 
 # Copier les fichiers
 cp ../p3/confs/deployment.yaml .
@@ -130,7 +130,7 @@ Modifiez le fichier `confs/application.yaml` avec votre URL de repository:
 ```yaml
 spec:
   source:
-    repoURL: https://github.com/USERNAME/chillion-iot-argocd-app.git
+    repoURL: https://github.com/BekxFR/trobert-iot-argocd-app.git
 ```
 
 ### 6. Test du GitOps

@@ -88,32 +88,33 @@ Cette commande :
 ./scripts/deploy_app.sh
 ```
 
+Ce script applique `confs/application.yaml` qui crée une ressource Argo CD Application.
+Argo CD synchronise ensuite automatiquement les manifestes depuis le repo GitHub vers le namespace `dev`.
+
 ### 4. Tests et vérification
 
 ```bash
 ./scripts/test.sh
 ```
 
-## Configuration GitOps (optionnel)
+## Configuration GitOps
 
-### 1. Créer un repository GitHub public
+Le repo GitHub `BekxFR/trobert-iot-argocd-app` contient les manifestes Kubernetes (deployment.yaml, service.yaml, ingress.yaml).
 
-- Nom: `VOTRE_LOGIN-iot-argocd-app`
-- Copier les fichiers de `confs/` (deployment.yaml, service.yaml, ingress.yaml)
-
-### 2. Modifier application.yaml
+`confs/application.yaml` référence ce repo et est appliqué par `deploy_app.sh` :
 
 ```yaml
 spec:
   source:
-    repoURL: https://github.com/VOTRE_USERNAME/VOTRE_LOGIN-iot-argocd-app.git
+    repoURL: https://github.com/BekxFR/trobert-iot-argocd-app.git
+    path: .
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
 ```
 
-### 3. Déployer l'application Argo CD
-
-```bash
-kubectl apply -f confs/application.yaml
-```
+Argo CD surveille le repo et synchronise automatiquement tout changement vers le namespace `dev`.
 
 ## Accès aux services
 
@@ -218,10 +219,8 @@ kubectl port-forward svc/wil-playground-service -n dev 8888:8888
 ### Suppression sélective
 
 ```bash
-# Supprimer juste l'application
-kubectl delete -f confs/deployment.yaml
-kubectl delete -f confs/service.yaml
-kubectl delete -f confs/ingress.yaml
+# Supprimer l'application Argo CD
+kubectl delete -f confs/application.yaml
 
 # Supprimer le cluster
 k3d cluster delete iot-cluster

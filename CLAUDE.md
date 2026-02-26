@@ -48,6 +48,7 @@ make status          # Status of all parts
 ### Per-part structure
 
 Each part (`p1/`, `p2/`, `p3/`) follows the same layout:
+
 - `scripts/` — Bash provisioning and test scripts
 - `confs/` — Kubernetes YAML manifests (p2, p3 only)
 - `Vagrantfile` — VM definition (p1, p2 only)
@@ -62,7 +63,7 @@ Each part (`p1/`, `p2/`, `p3/`) follows the same layout:
 
 ### GitOps flow (Part 3)
 
-Argo CD watches `https://github.com/chillion/iot-argocd-app.git` and auto-syncs changes to the `dev` namespace. The app image is `wil42/playground` (v1/v2).
+Argo CD watches `https://github.com/BekxFR/trobert-iot-argocd-app.git` and auto-syncs changes to the `dev` namespace. The app image is `wil42/playground` (v1/v2).
 
 ## Requirements
 

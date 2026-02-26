@@ -8,7 +8,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/chillion/iot-argocd-app.git
+    repoURL: https://github.com/BekxFR/trobert-iot-argocd-app.git
     targetRevision: HEAD
     path: .
   destination:

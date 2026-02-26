@@ -4,7 +4,7 @@ echo "=== Déploiement de l'application via Argo CD - Partie 3 ==="
 
 NAMESPACE_ARGOCD="argocd"
 NAMESPACE_DEV="dev"
-GITHUB_REPO="https://github.com/chillion/iot-argocd-app.git"
+GITHUB_REPO="https://github.com/BekxFR/trobert-iot-argocd-app.git"
 
 # Vérification que le cluster est prêt
 if ! kubectl get nodes >/dev/null 2>&1; then
@@ -21,20 +21,15 @@ fi
 echo "🔍 Vérification des namespaces..."
 kubectl get namespace $NAMESPACE_ARGOCD $NAMESPACE_DEV
 
-# Déploiement manuel initial (si le repo GitHub n'est pas encore prêt)
-echo "🚀 Déploiement manuel de l'application..."
-kubectl apply -f confs/deployment.yaml
-kubectl apply -f confs/service.yaml
-kubectl apply -f confs/ingress.yaml
+# Déploiement via Argo CD Application
+echo "🚀 Déploiement de l'application via Argo CD..."
+echo "Repository: $GITHUB_REPO"
+kubectl apply -f confs/application.yaml
 
-# Attendre que l'application soit prête
-echo "⏳ Attente du démarrage de l'application..."
+# Attendre que Argo CD synchronise et déploie l'application
+echo "⏳ Attente de la synchronisation Argo CD..."
+echo "Argo CD va automatiquement déployer depuis le repo GitHub dans le namespace $NAMESPACE_DEV"
 kubectl wait --for=condition=ready pod -l app=wil-playground -n $NAMESPACE_DEV --timeout=300s
-
-# Configuration de l'application Argo CD (optionnel si repo GitHub disponible)
-echo "🔄 Configuration de l'application Argo CD..."
-echo "⚠️  IMPORTANT: Modifiez le fichier confs/application.yaml avec votre repository GitHub"
-echo "Repository actuel: $GITHUB_REPO"
 
 # Test de l'application
 echo "🧪 Test de l'application..."
