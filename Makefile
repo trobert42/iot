@@ -8,6 +8,10 @@ VAGRANT_P1_DIR = p1
 VAGRANT_P2_DIR = p2
 P3_DIR = p3
 
+# Stocker les données Vagrant et VirtualBox dans /tmp/chillion
+export VAGRANT_HOME = /tmp/chillion/.vagrant.d
+VBOX_VM_DIR = /tmp/chillion/VirtualBox VMs
+
 # Couleurs pour l'affichage
 RED = \033[0;31m
 GREEN = \033[0;32m
@@ -66,6 +70,7 @@ p1: p1-up
 
 p1-up:
 	@echo "$(BLUE)🚀 Démarrage de la Partie 1 (K3s + Vagrant)...$(NC)"
+	@VBoxManage setproperty machinefolder "$(VBOX_VM_DIR)"
 	cd $(VAGRANT_P1_DIR) && vagrant up
 	@echo "$(GREEN)✅ VMs de la partie 1 démarrées$(NC)"
 	@echo "$(YELLOW)ℹ️  Vérification du cluster...$(NC)"
@@ -99,6 +104,7 @@ p2: p2-up
 
 p2-up:
 	@echo "$(BLUE)🚀 Démarrage de la Partie 2 (K3s + Applications)...$(NC)"
+	@VBoxManage setproperty machinefolder "$(VBOX_VM_DIR)"
 	cd $(VAGRANT_P2_DIR) && vagrant up
 	@echo "$(GREEN)✅ VM de la partie 2 démarrée$(NC)"
 	@echo "$(YELLOW)ℹ️  Vérification des applications...$(NC)"
