@@ -38,12 +38,26 @@ Référence: Docs/iot.en.subject.txt (v4.0)
 - [x] `deploy_app.sh` applique `application.yaml` (Argo CD Application) — déploiement GitOps
 - [x] Argo CD synchronise automatiquement depuis le repo GitHub
 
+## Bonus : GitLab local sur K3d — CONFORME
+
+- [x] GitLab deploye dans le cluster K3d (namespace gitlab)
+- [x] Helm chart officiel gitlab/gitlab avec configuration minimale
+- [x] 3 namespaces : argocd, dev, gitlab
+- [x] Argo CD synchronise depuis GitLab local (pas GitHub)
+- [x] URL interne : http://gitlab-webservice-default.gitlab.svc.cluster.local:8181
+- [x] Application wil42/playground dans namespace dev
+- [x] Port 8888 configure
+- [x] Repo secret Argo CD avec insecure: "true" (pas de TLS)
+- [x] Scripts automatises : install, setup, deploy_gitlab, configure_gitlab, deploy_app, test, cleanup
+- [x] GitOps v1 → v2 demontrable via GitLab local
+- [x] Makefile avec targets bonus (bonus, bonus-install, bonus-setup, bonus-gitlab, bonus-deploy, bonus-test, bonus-clean)
+
 ## Structure globale
 
-- [x] Dossiers p1/, p2/, p3/ à la racine
+- [x] Dossiers p1/, p2/, p3/, bonus/ à la racine
 - [x] Scripts dans scripts/
 - [x] Configs dans confs/ (y compris p1)
-- [ ] Pas de dossier bonus/ (optionnel, ne bloque pas la partie mandatory)
+- [x] Dossier bonus/ present avec GitLab local
 
 ---
 

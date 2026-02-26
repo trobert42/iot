@@ -1,12 +1,15 @@
 .PHONY: all p1 p1-up p1-down p1-clean p1-status p1-ssh p1-verify \
         p2 p2-up p2-down p2-clean p2-status p2-ssh p2-test \
         p3 p3-install p3-setup p3-deploy p3-up p3-down p3-clean p3-test p3-status check-docker \
+        bonus bonus-install bonus-setup bonus-gitlab bonus-gitlab-deploy bonus-gitlab-configure \
+        bonus-deploy bonus-test bonus-clean bonus-status \
         clean fclean cleanup-files status help check check-requirements logs-clean check-versions
 
 # Variables de configuration
 VAGRANT_P1_DIR = p1
 VAGRANT_P2_DIR = p2
 P3_DIR = p3
+BONUS_DIR = bonus
 
 # Stocker les données Vagrant et VirtualBox dans /tmp/chillion
 export VAGRANT_HOME = /tmp/chillion/.vagrant.d
@@ -50,6 +53,16 @@ help:
 	@echo "  make p3-down      - Arrête le cluster K3d"
 	@echo "  make p3-clean     - Supprime le cluster K3d"
 	@echo "  make p3-test      - Teste l'application et GitOps"
+	@echo ""
+	@echo "$(YELLOW)Bonus - GitLab local sur K3d:$(NC)"
+	@echo "  make bonus          - Lance le bonus complet"
+	@echo "  make bonus-install  - Installe Helm + outils"
+	@echo "  make bonus-setup    - Configure le cluster K3d + Argo CD"
+	@echo "  make bonus-gitlab   - Deploie et configure GitLab"
+	@echo "  make bonus-deploy   - Deploie l'application via Argo CD"
+	@echo "  make bonus-test     - Teste le bonus complet"
+	@echo "  make bonus-clean    - Supprime le cluster K3d du bonus"
+	@echo "  make bonus-status   - Affiche le statut du bonus"
 	@echo ""
 	@echo "$(YELLOW)Commandes globales:$(NC)"
 	@echo "  make all          - Lance toutes les parties"
@@ -186,11 +199,60 @@ p3-test:
 	@echo "$(BLUE)🧪 Test de l'application et GitOps...$(NC)"
 	cd $(P3_DIR) && ./scripts/test.sh
 
+# ==================== BONUS ====================
+bonus: check-docker bonus-install bonus-setup bonus-gitlab bonus-deploy
+	@echo "$(GREEN)✅ Bonus lance avec succes$(NC)"
+
+bonus-install:
+	@echo "$(BLUE)⎈ Installation des outils pour le Bonus...$(NC)"
+	cd $(BONUS_DIR) && ./scripts/install.sh
+
+bonus-setup:
+	@echo "$(BLUE)🚀 Configuration du cluster K3d + Argo CD (Bonus)...$(NC)"
+	cd $(BONUS_DIR) && ./scripts/setup_cluster.sh
+
+bonus-gitlab: bonus-gitlab-deploy bonus-gitlab-configure
+	@echo "$(GREEN)✅ GitLab deploye et configure$(NC)"
+
+bonus-gitlab-deploy:
+	@echo "$(BLUE)🦊 Deploiement de GitLab...$(NC)"
+	cd $(BONUS_DIR) && ./scripts/deploy_gitlab.sh
+
+bonus-gitlab-configure:
+	@echo "$(BLUE)⚙️  Configuration de GitLab...$(NC)"
+	cd $(BONUS_DIR) && ./scripts/configure_gitlab.sh
+
+bonus-deploy:
+	@echo "$(BLUE)📦 Deploiement de l'application via Argo CD (Bonus)...$(NC)"
+	cd $(BONUS_DIR) && ./scripts/deploy_app.sh
+
+bonus-test:
+	@echo "$(BLUE)🧪 Test du Bonus GitLab...$(NC)"
+	cd $(BONUS_DIR) && ./scripts/test.sh
+
+bonus-clean:
+	@echo "$(RED)🗑️  Nettoyage du Bonus...$(NC)"
+	cd $(BONUS_DIR) && ./scripts/cleanup.sh
+	@echo "$(GREEN)✅ Bonus nettoye$(NC)"
+
+bonus-status:
+	@echo "$(BLUE)📊 Statut du Bonus:$(NC)"
+	@echo "$(YELLOW)Clusters K3d:$(NC)"
+	k3d cluster list || echo "$(RED)❌ Aucun cluster K3d$(NC)"
+	@echo "$(YELLOW)Namespaces:$(NC)"
+	kubectl get namespaces || echo "$(RED)❌ Cluster non accessible$(NC)"
+	@echo "$(YELLOW)Pods GitLab:$(NC)"
+	kubectl get pods -n gitlab || echo "$(RED)❌ GitLab non deploye$(NC)"
+	@echo "$(YELLOW)Pods Argo CD:$(NC)"
+	kubectl get pods -n argocd || echo "$(RED)❌ Argo CD non deploye$(NC)"
+	@echo "$(YELLOW)Application dev:$(NC)"
+	kubectl get pods -n dev || echo "$(RED)❌ Namespace dev non trouve$(NC)"
+
 # ==================== COMMANDES GLOBALES ====================
 all: p1
 	@echo "$(GREEN)🎉 Toutes les parties ont été lancées avec succès!$(NC)"
 
-clean: p1-clean p2-clean p3-clean cleanup-files
+clean: p1-clean p2-clean p3-clean bonus-clean cleanup-files
 	@echo "$(GREEN)🧹 Nettoyage complet terminé$(NC)"
 
 fclean: clean
@@ -198,6 +260,7 @@ fclean: clean
 	cd $(VAGRANT_P1_DIR) && vagrant destroy -f || true
 	cd $(VAGRANT_P2_DIR) && vagrant destroy -f || true
 	k3d cluster delete iot-cluster || true
+	k3d cluster delete iot-bonus || true
 	docker system prune -f || true
 	@echo "$(GREEN)✅ Nettoyage forcé terminé$(NC)"
 
@@ -205,7 +268,7 @@ cleanup-files:
 	@echo "$(YELLOW)🧹 Nettoyage des fichiers temporaires...$(NC)"
 	@./Tools/cleanup.sh || echo "$(YELLOW)⚠️  Script de nettoyage non trouvé$(NC)"
 
-status: p1-status p2-status p3-status
+status: p1-status p2-status p3-status bonus-status
 	@echo "$(GREEN)📊 Statut global affiché$(NC)"
 
 # ==================== RÈGLES AVANCÉES ====================

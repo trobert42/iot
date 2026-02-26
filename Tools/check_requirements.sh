@@ -93,6 +93,41 @@ if [ -f "p3/confs/deployment.yaml" ]; then
 fi
 
 echo ""
+echo -e "${BLUE}🦊 Vérification des contenus Bonus...${NC}"
+
+# Bonus - Structure
+if [ -d "bonus" ]; then
+    check_requirement "[ -d 'bonus/scripts' ]" "Bonus Scripts" "Dossier scripts présent" "Dossier scripts manquant"
+    check_requirement "[ -d 'bonus/confs' ]" "Bonus Confs" "Dossier confs présent" "Dossier confs manquant"
+
+    # Bonus - Scripts obligatoires
+    check_requirement "[ -f 'bonus/scripts/install.sh' ]" "Bonus Script install" "Script présent" "Script manquant"
+    check_requirement "[ -f 'bonus/scripts/setup_cluster.sh' ]" "Bonus Script setup" "Script présent" "Script manquant"
+    check_requirement "[ -f 'bonus/scripts/deploy_gitlab.sh' ]" "Bonus Script GitLab" "Script présent" "Script manquant"
+    check_requirement "[ -f 'bonus/scripts/configure_gitlab.sh' ]" "Bonus Script config" "Script présent" "Script manquant"
+    check_requirement "[ -f 'bonus/scripts/deploy_app.sh' ]" "Bonus Script deploy" "Script présent" "Script manquant"
+    check_requirement "[ -f 'bonus/scripts/test.sh' ]" "Bonus Script test" "Script présent" "Script manquant"
+    check_requirement "[ -x 'bonus/scripts/install.sh' ]" "Bonus Scripts executables" "Scripts exécutables" "Scripts non exécutables"
+
+    # Bonus - Configurations
+    check_requirement "[ -f 'bonus/confs/gitlab-values.yaml' ]" "Bonus GitLab values" "Configuration Helm présente" "Configuration manquante"
+    check_requirement "[ -f 'bonus/confs/application.yaml' ]" "Bonus Argo App" "Application Argo CD configurée" "Application manquante"
+    check_requirement "[ -f 'bonus/confs/deployment.yaml' ]" "Bonus Deployment" "Deployment présent" "Deployment manquant"
+    check_requirement "[ -f 'bonus/confs/service.yaml' ]" "Bonus Service" "Service présent" "Service manquant"
+    check_requirement "[ -f 'bonus/confs/ingress.yaml' ]" "Bonus Ingress" "Ingress présent" "Ingress manquant"
+
+    # Bonus - Vérification que la source pointe vers GitLab local
+    if [ -f "bonus/confs/application.yaml" ]; then
+        check_requirement "grep -q 'gitlab' bonus/confs/application.yaml" "Bonus Source GitLab" "Source pointe vers GitLab local" "Source ne pointe pas vers GitLab"
+        check_requirement "! grep -q 'github' bonus/confs/application.yaml" "Bonus Pas GitHub" "Pas de référence GitHub" "Référence GitHub trouvée"
+    fi
+
+    check_requirement "[ -f 'bonus/README.md' ]" "Bonus README" "Documentation présente" "Documentation manquante"
+else
+    echo -e "⚠️  ${YELLOW}Dossier bonus/ non présent (optionnel)${NC}"
+fi
+
+echo ""
 echo -e "${BLUE}📁 Vérification outils et documentation...${NC}"
 
 # Outils
@@ -137,6 +172,13 @@ echo "   • Namespaces: argocd et dev"
 echo "   • Repository GitHub public"
 echo "   • Application port 8888"
 echo "   • GitOps v1 → v2 démontrable"
+echo ""
+echo "🎯 Bonus:"
+echo "   • GitLab local dans le cluster K3d"
+echo "   • 3 namespaces : argocd, dev, gitlab"
+echo "   • Argo CD synchronise depuis GitLab (pas GitHub)"
+echo "   • Application accessible sur port 8888"
+echo "   • Démo GitOps v1 → v2 via GitLab local"
 echo ""
 echo -e "${GREEN}📚 Documentation complète disponible dans Docs/CONSIGNES_POINTS_CLES.md${NC}"
 echo ""

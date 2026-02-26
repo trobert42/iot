@@ -9,6 +9,7 @@ Inception-of-Things (IoT) — a Kubernetes administration project in three progr
 - **p1/**: K3s + Vagrant — 2 VMs (chillionS server + chillionSW agent) on 192.168.56.110-111
 - **p2/**: K3s + 3 web apps — 1 VM with Traefik ingress routing (app1.com, app2.com, default→app3)
 - **p3/**: K3d + Argo CD — Docker-based GitOps pipeline, no VMs, port 8888
+- **bonus/**: K3d + GitLab local + Argo CD — GitLab in-cluster, GitOps from local GitLab instead of GitHub
 
 ## Common Commands
 
@@ -35,6 +36,15 @@ make p3-setup        # Create K3d cluster + install Argo CD
 make p3-deploy       # Deploy app to dev namespace
 make p3-test         # Verify deployment and GitOps sync
 
+# Bonus: K3d + GitLab local + Argo CD
+make bonus           # Full pipeline: install → setup → gitlab → deploy
+make bonus-install   # Install Helm + P3 tools if missing
+make bonus-setup     # Create K3d cluster + Argo CD + 3 namespaces
+make bonus-gitlab    # Deploy + configure GitLab (~15min)
+make bonus-deploy    # Deploy app via Argo CD from local GitLab
+make bonus-test      # Verify GitLab, Argo CD, app, GitOps source
+make bonus-clean     # Delete bonus K3d cluster
+
 # Global
 make clean           # Destroy all VMs + K3d clusters + temp files
 make fclean          # Force cleanup including docker system prune
@@ -47,7 +57,7 @@ make status          # Status of all parts
 
 ### Per-part structure
 
-Each part (`p1/`, `p2/`, `p3/`) follows the same layout:
+Each part (`p1/`, `p2/`, `p3/`, `bonus/`) follows the same layout:
 
 - `scripts/` — Bash provisioning and test scripts
 - `confs/` — Kubernetes YAML manifests (p2, p3 only)
@@ -65,10 +75,15 @@ Each part (`p1/`, `p2/`, `p3/`) follows the same layout:
 
 Argo CD watches `https://github.com/BekxFR/trobert-iot-argocd-app.git` and auto-syncs changes to the `dev` namespace. The app image is `wil42/playground` (v1/v2).
 
+### GitOps flow (Bonus)
+
+Same as Part 3 but Argo CD watches the local GitLab instance via `http://gitlab-webservice-default.gitlab.svc.cluster.local:8181/root/iot-app.git`. GitLab runs in the `gitlab` namespace. Bonus uses cluster `iot-bonus` and 3 namespaces: `argocd`, `dev`, `gitlab`.
+
 ## Requirements
 
 - **p1/p2**: Vagrant + VirtualBox
 - **p3**: Docker (must be accessible without sudo — use `newgrp docker` if needed)
+- **bonus**: Docker + Helm (installed by bonus/scripts/install.sh), ~3 CPU and 6 GB RAM for GitLab
 - `Docs/CONSIGNES_POINTS_CLES.md` contains the full evaluation checklist
 
 ## Key constraints
@@ -77,3 +92,4 @@ Argo CD watches `https://github.com/BekxFR/trobert-iot-argocd-app.git` and auto-
 - p2 app2 must have exactly 3 replicas
 - p3 app must be in `dev` namespace, Argo CD in `argocd` namespace
 - All K3s scripts configure the `--flannel-iface` to use `enp0s8` (VirtualBox host-only adapter)
+- Bonus GitLab uses HTTP only (no TLS), Argo CD repo secret with `insecure: "true"`
