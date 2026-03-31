@@ -25,37 +25,37 @@ Cette partie met en place un cluster Kubernetes K3s distribué sur 2 machines vi
 
 ## Conformité aux consignes
 
-### ✅ Exigences respectées
+### Exigences respectées
 
 1. **Noms des machines** :
 
-   - ✅ `chillionS` (login + S pour Server)
-   - ✅ `chillionSW` (login + SW pour ServerWorker)
+   - `chillionS` (login + S pour Server)
+   - `chillionSW` (login + SW pour ServerWorker)
 
 2. **Adresses IP** :
 
-   - ✅ Server : `192.168.56.110`
-   - ✅ Worker : `192.168.56.111`
+   - Server : `192.168.56.110`
+   - Worker : `192.168.56.111`
 
 3. **Ressources** :
 
-   - ✅ 1 CPU par machine
-   - ✅ 1024 MB RAM (dans la limite recommandée 512-1024 MB)
+   - 1 CPU par machine
+   - 1024 MB RAM (dans la limite recommandée 512-1024 MB)
 
 4. **SSH sans mot de passe** :
 
-   - ✅ Clé privée Vagrant copiée
-   - ✅ Configuration SSH automatique
-   - ✅ StrictHostKeyChecking désactivé
+   - Clé privée Vagrant copiée
+   - Configuration SSH automatique
+   - StrictHostKeyChecking désactivé
 
 5. **K3s Installation** :
 
-   - ✅ Mode controller sur chillionS
-   - ✅ Mode agent sur chillionSW
-   - ✅ kubectl installé et configuré
+   - Mode controller sur chillionS
+   - Mode agent sur chillionSW
+   - kubectl installé et configuré
 
 6. **Distribution** :
-   - ✅ Ubuntu 20.04 LTS (focal64) - version stable
+   - Ubuntu 20.04 LTS (focal64) - version stable
 
 ## Structure des fichiers
 
@@ -229,4 +229,3 @@ vagrant ssh chillionS -c "kubectl get pods"
 vagrant ssh chillionS -c "kubectl delete pod test-pod"
 ```
 
-Cette partie 1 respecte intégralement les exigences du sujet et fournit une base solide pour les parties suivantes du projet.

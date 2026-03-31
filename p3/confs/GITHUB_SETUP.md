@@ -6,8 +6,8 @@
 
 - Nom suggéré: `trobert-iot-argocd-app` (ou avec votre login)
 - Description: "IoT Project - Part 3 - GitOps with Argo CD"
-- Public: ✅
-- README: ✅
+- Public: oui
+- README: oui
 
 ### 2. Structure du repository
 

@@ -1,12 +1,12 @@
 #!/bin/bash
 
-echo "🧪 Test de Traefik..."
+echo "Test de Traefik..."
 
 # Configurer kubectl
 export KUBECONFIG=~/.kube/config-k3s
 
 # Créer une app de test
-echo "📦 Création d'une application test..."
+echo "Création d'une application test..."
 kubectl create deployment hello-world --image=nginxdemos/hello --port=80
 kubectl expose deployment hello-world --port=80
 
@@ -36,10 +36,10 @@ EOF
 kubectl wait --for=condition=available deployment/hello-world --timeout=60s
 
 echo ""
-echo "✅ Application déployée !"
-echo "🔗 Ajouter à /etc/hosts : 192.168.56.110 hello.local"
-echo "🌐 Accessible sur : http://hello.local"
+echo "Application déployée !"
+echo "Ajouter à /etc/hosts : 192.168.56.110 hello.local"
+echo "Accessible sur : http://hello.local"
 echo ""
-echo "📊 Dashboard Traefik :"
+echo "Dashboard Traefik :"
 echo "kubectl port-forward -n kube-system svc/traefik 8080:8080"
 echo "Puis : http://localhost:8080"

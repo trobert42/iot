@@ -2,7 +2,7 @@
 
 Ce document détaille tous les points cruciaux des consignes pour s'assurer du respect des exigences du projet Inception-of-Things.
 
-## 📋 Vue d'ensemble du projet
+## Vue d'ensemble du projet
 
 ### Objectif général
 - **Nom** : Inception-of-Things (IoT)
@@ -18,9 +18,9 @@ iot/
 └── bonus/        # Partie bonus (optionnelle)
 ```
 
-## 🔧 Partie 1 : K3s et Vagrant
+## Partie 1 : K3s et Vagrant
 
-### ✅ Exigences obligatoires
+### Exigences obligatoires
 
 #### Machines virtuelles
 - **Nombre** : Exactement 2 machines
@@ -46,7 +46,7 @@ iot/
 - **Deuxième machine** : Mode agent (worker)
 - **kubectl** : Installé et configuré
 
-### 🎯 Points de validation
+### Points de validation
 - [ ] 2 VMs avec les bons noms
 - [ ] IPs fixes correctes
 - [ ] SSH sans mot de passe
@@ -54,9 +54,9 @@ iot/
 - [ ] K3s agent connecté au cluster
 - [ ] `kubectl get nodes` affiche les 2 nodes
 
-## 🌐 Partie 2 : K3s et trois applications
+## Partie 2 : K3s et trois applications
 
-### ✅ Exigences obligatoires
+### Exigences obligatoires
 
 #### Machine virtuelle
 - **Nombre** : 1 seule machine
@@ -78,7 +78,7 @@ iot/
 - **Application 2** : Doit avoir exactement 3 replicas
 - **Ingress** : Doit être configuré (ne pas l'afficher pendant l'évaluation)
 
-### 🎯 Points de validation
+### Points de validation
 - [ ] 1 VM avec K3s serveur
 - [ ] 3 applications web déployées
 - [ ] Routing par HOST fonctionnel
@@ -90,9 +90,9 @@ iot/
   curl http://192.168.56.110
   ```
 
-## 🚀 Partie 3 : K3d et Argo CD
+## Partie 3 : K3d et Argo CD
 
-### ✅ Exigences obligatoires
+### Exigences obligatoires
 
 #### Environnement
 - **K3d** : Au lieu de Vagrant (comprendre la différence)
@@ -122,7 +122,7 @@ iot/
 - **Changement de version** : Via modification Git
 - **Synchronisation** : Argo CD doit synchroniser automatiquement
 
-### 🎯 Points de validation
+### Points de validation
 - [ ] K3d installé et fonctionnel
 - [ ] Script d'installation complet
 - [ ] 2 namespaces créés (argocd + dev)
@@ -131,7 +131,7 @@ iot/
 - [ ] Test changement v1 → v2 via Git
 - [ ] Démonstration GitOps pendant l'évaluation
 
-### 📝 Démonstration obligatoire pendant l'évaluation
+### Démonstration obligatoire pendant l'évaluation
 ```bash
 # État initial
 curl http://localhost:8888
@@ -148,7 +148,7 @@ curl http://localhost:8888
 # Réponse: {"status":"ok", "message": "v2"}
 ```
 
-## 🏆 Partie Bonus (optionnelle)
+## Partie Bonus (optionnelle)
 
 ### Exigences
 - **GitLab local** : Instance GitLab qui fonctionne localement
@@ -160,7 +160,7 @@ curl http://localhost:8888
 - **Prérequis** : Partie obligatoire parfaite et sans erreur
 - **Évaluation** : Bonus évalué seulement si tout le reste est parfait
 
-## 🔍 Points critiques pour l'évaluation
+## Points critiques pour l'évaluation
 
 ### Différence K3s vs K3d
 | Aspect | K3s | K3d |
@@ -193,28 +193,28 @@ find -maxdepth 2 -ls
 - **Configurations** : Dans dossier `confs/`
 - **Documentation** : README dans chaque partie
 
-## 🚨 Erreurs à éviter
+## Erreurs à éviter
 
 ### Partie 1
-- ❌ Mauvais nommage des machines
-- ❌ IPs incorrectes
-- ❌ SSH avec mot de passe
-- ❌ K3s non fonctionnel
+- Mauvais nommage des machines
+- IPs incorrectes
+- SSH avec mot de passe
+- K3s non fonctionnel
 
 ### Partie 2
-- ❌ Plus ou moins de 3 applications
-- ❌ Routing HOST incorrect
-- ❌ App2 sans 3 replicas
-- ❌ Ingress affiché pendant l'évaluation
+- Plus ou moins de 3 applications
+- Routing HOST incorrect
+- App2 sans 3 replicas
+- Ingress affiché pendant l'évaluation
 
 ### Partie 3
-- ❌ Pas de script d'installation
-- ❌ Repository GitHub privé
-- ❌ Application non accessible port 8888
-- ❌ GitOps non fonctionnel
-- ❌ Pas de démonstration v1→v2
+- Pas de script d'installation
+- Repository GitHub privé
+- Application non accessible port 8888
+- GitOps non fonctionnel
+- Pas de démonstration v1→v2
 
-## 📚 Documentation et ressources
+## Documentation et ressources
 
 ### Lectures recommandées
 - Documentation K3s officielle
@@ -240,7 +240,7 @@ k3d node list
 argocd app list/sync/get
 ```
 
-## ✅ Checklist finale
+## Checklist finale
 
 ### Avant l'évaluation
 - [ ] Toutes les parties fonctionnent indépendamment
@@ -258,4 +258,3 @@ argocd app list/sync/get
 - [ ] Montrer la compréhension des concepts
 - [ ] Effectuer la démonstration GitOps
 
-Cette documentation garantit le respect de toutes les exigences du projet IoT.

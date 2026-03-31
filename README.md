@@ -55,17 +55,17 @@ Le projet inclut un `.gitignore` complet qui exclut :
 
 ## Documentation
 
-### 📋 Lecture Essentielle
+### Lecture Essentielle
 - **[Points Clés des Consignes](Docs/CONSIGNES_POINTS_CLES.md)** - Exigences détaillées et points critiques pour l'évaluation
 - **[Informations .gitignore](Docs/GITIGNORE_INFO.md)** - Fichiers ignorés et gestion du repository
 
-### 📖 Documentation par Partie
+### Documentation par Partie
 Chaque partie a sa propre documentation détaillée :
 - [Documentation Partie 1](p1/README.md) - K3s et Vagrant
 - [Documentation Partie 2](p2/README.md) - K3s et Applications
 - [Documentation Partie 3](p3/README.md) - K3d et Argo CD
 
-### 🎯 Référence Rapide
+### Référence Rapide
 - **Partie 1** : 2 VMs (chillionS + chillionSW), cluster K3s, IPs 192.168.56.110-111
 - **Partie 2** : 1 VM, 3 applications web, routage par en-tête HOST, app2 avec 3 replicas
 - **Partie 3** : cluster K3d, Argo CD, GitOps avec GitHub, port 8888

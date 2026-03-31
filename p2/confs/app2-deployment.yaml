@@ -66,11 +66,11 @@ data:
     </head>
     <body>
         <div class="container">
-            <h1>⚡ Application 2</h1>
+            <h1>Application 2</h1>
             <p>Bienvenue sur l'Application 2 !</p>
             <p>Host: app2.com</p>
             <div class="replica-info">
-                <p>🔄 Cette application fonctionne avec 3 replicas</p>
+                <p>Cette application fonctionne avec 3 replicas</p>
                 <p>Load Balancing automatique</p>
             </div>
             <p>Partie 2 - IoT Project</p>

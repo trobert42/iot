@@ -17,16 +17,16 @@ check_requirement() {
     local failure_msg="$4"
     
     if eval "$condition"; then
-        echo -e "✅ ${GREEN}$description${NC}: $success_msg"
+        echo -e "[OK] ${GREEN}$description${NC}: $success_msg"
         return 0
     else
-        echo -e "❌ ${RED}$description${NC}: $failure_msg"
+        echo -e "[FAIL] ${RED}$description${NC}: $failure_msg"
         return 1
     fi
 }
 
 echo ""
-echo -e "${BLUE}🔍 Vérification de la structure du projet...${NC}"
+echo -e "${BLUE}Vérification de la structure du projet...${NC}"
 
 # Vérification structure générale
 check_requirement "[ -d 'p1' ]" "Structure P1" "Dossier p1 présent" "Dossier p1 manquant"
@@ -46,7 +46,7 @@ check_requirement "[ -d 'p3/scripts' ]" "P3 Scripts" "Dossier scripts présent" 
 check_requirement "[ -d 'p3/confs' ]" "P3 Confs" "Dossier confs présent" "Dossier confs manquant"
 
 echo ""
-echo -e "${BLUE}📋 Vérification des contenus P1...${NC}"
+echo -e "${BLUE}Vérification des contenus P1...${NC}"
 
 # P1 - Vérification Vagrantfile
 if [ -f "p1/Vagrantfile" ]; then
@@ -62,7 +62,7 @@ check_requirement "[ -f 'p1/scripts/install_k3s_agent.sh' ]" "P1 Script agent" "
 check_requirement "[ -x 'p1/scripts/install_k3s_server.sh' ]" "P1 Script executable" "Scripts exécutables" "Scripts non exécutables"
 
 echo ""
-echo -e "${BLUE}🌐 Vérification des contenus P2...${NC}"
+echo -e "${BLUE}Vérification des contenus P2...${NC}"
 
 # P2 - Vérification configurations
 check_requirement "[ -f 'p2/confs/app1-deployment.yaml' ]" "P2 App1 config" "Configuration présente" "Configuration manquante"
@@ -76,7 +76,7 @@ if [ -f "p2/confs/app2-deployment.yaml" ]; then
 fi
 
 echo ""
-echo -e "${BLUE}🚀 Vérification des contenus P3...${NC}"
+echo -e "${BLUE}Vérification des contenus P3...${NC}"
 
 # P3 - Scripts obligatoires
 check_requirement "[ -f 'p3/scripts/install.sh' ]" "P3 Script installation" "Script présent" "Script manquant"
@@ -93,7 +93,7 @@ if [ -f "p3/confs/deployment.yaml" ]; then
 fi
 
 echo ""
-echo -e "${BLUE}🦊 Vérification des contenus Bonus...${NC}"
+echo -e "${BLUE}Vérification des contenus Bonus...${NC}"
 
 # Bonus - Structure
 if [ -d "bonus" ]; then
@@ -124,11 +124,11 @@ if [ -d "bonus" ]; then
 
     check_requirement "[ -f 'bonus/README.md' ]" "Bonus README" "Documentation présente" "Documentation manquante"
 else
-    echo -e "⚠️  ${YELLOW}Dossier bonus/ non présent (optionnel)${NC}"
+    echo -e "[WARN] ${YELLOW}Dossier bonus/ non présent (optionnel)${NC}"
 fi
 
 echo ""
-echo -e "${BLUE}📁 Vérification outils et documentation...${NC}"
+echo -e "${BLUE}Vérification outils et documentation...${NC}"
 
 # Outils
 check_requirement "[ -f 'Makefile' ]" "Makefile" "Présent" "Manquant"
@@ -143,7 +143,7 @@ check_requirement "[ -f 'p2/README.md' ]" "README P2" "Présent" "Manquant"
 check_requirement "[ -f 'p3/README.md' ]" "README P3" "Présent" "Manquant"
 
 echo ""
-echo -e "${BLUE}🔧 Vérification des prérequis système...${NC}"
+echo -e "${BLUE}Vérification des prérequis système...${NC}"
 
 # Outils système
 check_requirement "command -v vagrant >/dev/null 2>&1" "Vagrant installé" "Vagrant disponible" "Vagrant non installé"
@@ -151,35 +151,13 @@ check_requirement "command -v docker >/dev/null 2>&1" "Docker installé" "Docker
 check_requirement "command -v kubectl >/dev/null 2>&1" "kubectl installé" "kubectl disponible" "kubectl non installé"
 
 echo ""
-echo -e "${YELLOW}📋 Résumé des points critiques pour l'évaluation:${NC}"
+echo -e "${YELLOW}Points critiques pour l'évaluation:${NC}"
 echo ""
-echo "🎯 Partie 1:"
-echo "   • 2 VMs nommées chillionS et chillionSW"
-echo "   • IPs 192.168.56.110 et 192.168.56.111"
-echo "   • SSH sans mot de passe"
-echo "   • K3s cluster fonctionnel"
+echo "P1: 2 VMs (chillionS/chillionSW), IPs .110/.111, SSH sans mdp, K3s OK"
+echo "P2: 1 VM, 3 apps, routing HOST, app2 3 replicas, ingress"
+echo "P3: K3d, namespaces argocd/dev, GitHub, port 8888, GitOps v1->v2"
+echo "Bonus: GitLab local, ns argocd/dev/gitlab, Argo CD depuis GitLab, port 8888"
 echo ""
-echo "🎯 Partie 2:"
-echo "   • 1 VM avec 3 applications web"
-echo "   • Routing par HOST (app1.com, app2.com)"
-echo "   • App2 avec exactement 3 replicas"
-echo "   • Ingress configuré (ne pas montrer pendant l'éval)"
+echo -e "${GREEN}Voir Docs/CONSIGNES_POINTS_CLES.md${NC}"
 echo ""
-echo "🎯 Partie 3:"
-echo "   • K3d au lieu de Vagrant"
-echo "   • Script d'installation des outils"
-echo "   • Namespaces: argocd et dev"
-echo "   • Repository GitHub public"
-echo "   • Application port 8888"
-echo "   • GitOps v1 → v2 démontrable"
-echo ""
-echo "🎯 Bonus:"
-echo "   • GitLab local dans le cluster K3d"
-echo "   • 3 namespaces : argocd, dev, gitlab"
-echo "   • Argo CD synchronise depuis GitLab (pas GitHub)"
-echo "   • Application accessible sur port 8888"
-echo "   • Démo GitOps v1 → v2 via GitLab local"
-echo ""
-echo -e "${GREEN}📚 Documentation complète disponible dans Docs/CONSIGNES_POINTS_CLES.md${NC}"
-echo ""
-echo "✅ Vérification terminée ! Consultez les erreurs éventuelles ci-dessus."
+echo "Vérification terminée."

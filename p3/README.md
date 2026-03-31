@@ -20,7 +20,7 @@ Cette partie implémente un cluster Kubernetes K3d avec Argo CD pour la gestion 
 
 ## Conformité aux consignes
 
-### ✅ Exigences respectées
+### Exigences respectées
 
 1. **K3d installé** : Remplace Vagrant par Docker
 2. **Script d'installation** : Installe tous les outils nécessaires
@@ -67,7 +67,7 @@ chmod +x scripts/*.sh
 ./scripts/install.sh
 ```
 
-**⚠️ Important**: Redémarrez votre session ou exécutez `newgrp docker` après l'installation.
+**Important**: Redémarrez votre session ou exécutez `newgrp docker` après l'installation.
 
 ### 2. Configuration du cluster
 
@@ -290,4 +290,3 @@ curl http://localhost:9999
 4. **Versioning**: Gestion facile des versions
 5. **Observabilité**: Interface Argo CD pour monitoring
 
-Cette partie 3 respecte intégralement les consignes du sujet et démontre une maîtrise des concepts GitOps avec Kubernetes.

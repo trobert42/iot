@@ -66,10 +66,10 @@ data:
     </head>
     <body>
         <div class="container">
-            <h1>🏠 Application 3</h1>
+            <h1>Application 3</h1>
             <p>Bienvenue sur l'Application par Défaut !</p>
             <div class="default-info">
-                <p>🎯 Cette application s'affiche par défaut</p>
+                <p>Cette application s'affiche par défaut</p>
                 <p>Accès direct via IP : 192.168.56.110</p>
             </div>
             <p>Partie 2 - IoT Project</p>
