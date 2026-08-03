@@ -4,9 +4,11 @@ metadata:
   name: wil-playground-ingress
   namespace: dev
   annotations:
-    kubernetes.io/ingress.class: traefik
     traefik.ingress.kubernetes.io/router.entrypoints: web
 spec:
+  # IngressClass moderne : l'annotation kubernetes.io/ingress.class est depreciee
+  # et n'est plus prise en compte par Traefik v3.
+  ingressClassName: traefik
   rules:
     - http:
         paths:
