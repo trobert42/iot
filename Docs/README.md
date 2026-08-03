@@ -2,6 +2,22 @@
 
 Ce répertoire contient la documentation détaillée du projet IoT.
 
+## Documentation web complète
+
+### `index.html`
+
+**Point d'entrée recommandé.** Documentation technique complète au format web :
+notions (virtualisation, conteneurs, Kubernetes, K3s, K3d, GitOps, Helm),
+architecture déployée, choix techniques justifiés, runbook, dépannage et lexique
+de 109 entrées.
+
+Chaque acronyme du texte affiche sa signification au survol et renvoie au lexique.
+Page autonome, sans dépendance réseau : elle s'ouvre par un simple double-clic.
+
+```bash
+xdg-open Docs/index.html    # ou : firefox Docs/index.html
+```
+
 ## Documents disponibles
 
 ### `CONSIGNES_POINTS_CLES.md`

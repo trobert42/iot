@@ -56,6 +56,7 @@ Le projet inclut un `.gitignore` complet qui exclut :
 ## Documentation
 
 ### Lecture Essentielle
+- **[Documentation technique complète](Docs/index.html)** - Toutes les notions du projet au format web : virtualisation, Kubernetes, K3s, K3d, GitOps, Helm, choix techniques, runbook, dépannage et lexique. Bulles d'information sur chaque acronyme. Ouvrir avec `xdg-open Docs/index.html`
 - **[Points Clés des Consignes](Docs/CONSIGNES_POINTS_CLES.md)** - Exigences détaillées et points critiques pour l'évaluation
 - **[Informations .gitignore](Docs/GITIGNORE_INFO.md)** - Fichiers ignorés et gestion du repository
 
