@@ -135,7 +135,7 @@ chillionsw  Ready    <none>                 1m    v1.3x.x+k3s1   192.168.56.111 
 ### K3s Server (chillionS)
 
 - **API Server** : Accessible sur `192.168.56.110:6443`
-- **etcd** : Base de données intégrée
+- **Datastore** : SQLite intégré (via kine), et non etcd : c'est le stockage par défaut de K3s en mode serveur unique
 - **Controller Manager** : Gestion des ressources
 - **Scheduler** : Placement des pods
 - **Traefik Ingress** : Contrôleur d'ingress par défaut
