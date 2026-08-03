@@ -17,6 +17,9 @@ vagrant_log
 # Fichiers de configuration Vagrant temporaires
 .vagrant_ssh_config
 
+# Token de jonction K3s publie par chillionS pour chillionSW (genere a l'execution)
+p1/confs/node-token
+
 # ==================== KUBERNETES ====================
 # Fichiers kubeconfig temporaires
 kubeconfig
