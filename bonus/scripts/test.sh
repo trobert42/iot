@@ -49,24 +49,21 @@ check "Pods wil-playground en Running dans dev" "kubectl get pods -n $NAMESPACE_
 kubectl get pods -n $NAMESPACE_DEV 2>/dev/null || true
 kubectl get svc -n $NAMESPACE_DEV 2>/dev/null || true
 
-# 6. Test de connectivite sur port 8888
-echo "Test de l'application sur port 8888..."
-kubectl port-forward svc/wil-playground-service -n $NAMESPACE_DEV 8888:8888 &
-PORT_FORWARD_PID=$!
-sleep 3
+# 6. Test de connectivite sur port 8888 (via l'Ingress Traefik)
+echo "Test de l'application sur http://localhost:8888..."
+response=$(curl -s --max-time 10 http://localhost:8888/ || true)
 
-if response=$(curl -s http://localhost:8888 2>/dev/null); then
-    check "Application repond sur port 8888" "echo '$response' | grep -q 'status'"
+check "Application repond sur port 8888" "echo '$response' | grep -q 'status'"
+if [ -n "$response" ]; then
     echo "  Reponse: $response"
-    if echo "$response" | grep -q "v1"; then
-        echo "  Version v1 detectee"
-    elif echo "$response" | grep -q "v2"; then
+    if echo "$response" | grep -q "v2"; then
         echo "  Version v2 detectee"
+    elif echo "$response" | grep -q "v1"; then
+        echo "  Version v1 detectee"
     fi
 else
-    check "Application repond sur port 8888" "false"
+    echo "  Repli possible: kubectl port-forward svc/wil-playground-service -n $NAMESPACE_DEV 8888:8888"
 fi
-kill $PORT_FORWARD_PID 2>/dev/null || true
 
 # 7. Verification que la source Argo CD pointe vers GitLab (pas GitHub)
 echo "Verification de la source Argo CD..."
@@ -99,8 +96,8 @@ echo "============================================"
 echo "Resume: $PASS passed, $FAIL failed"
 echo "============================================"
 
-echo "Acces Argo CD:    kubectl port-forward svc/argocd-server -n $NAMESPACE_ARGOCD 8080:443"
-echo "Acces application: kubectl port-forward svc/wil-playground-service -n $NAMESPACE_DEV 8888:8888"
+echo "Acces Argo CD:     kubectl port-forward svc/argocd-server -n $NAMESPACE_ARGOCD 8080:443"
+echo "Acces application: http://localhost:8888 (Ingress Traefik)"
 
 echo "Demo GitOps v1 -> v2:"
 echo "  1. kubectl port-forward svc/gitlab-webservice-default -n gitlab 30080:8181 &"
@@ -108,6 +105,6 @@ echo "  2. git clone http://root:<password>@localhost:30080/root/iot-app.git /tm
 echo "  3. cd /tmp/iot-app && sed -i 's/v1/v2/' deployment.yaml"
 echo "  4. git add . && git commit -m 'v2' && git push"
 echo "  5. Argo CD synchronise automatiquement (~3 min)"
-echo "  6. curl localhost:8888 -> v2"
+echo "  6. curl http://localhost:8888 -> v2"
 
 echo "Tests termines."
