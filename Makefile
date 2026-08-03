@@ -11,9 +11,12 @@ VAGRANT_P2_DIR = p2
 P3_DIR = p3
 BONUS_DIR = bonus
 
-# Stocker les données Vagrant et VirtualBox dans /tmp/chillion
-export VAGRANT_HOME = /tmp/chillion/.vagrant.d
-VBOX_VM_DIR = /tmp/chillion/VirtualBox VMs
+# Stockage des box Vagrant et des disques VirtualBox.
+# Surchargeable si /tmp est un tmpfs (RAM) ou trop petit :
+#   make VM_STORAGE=/goinfre/$(USER) p1
+VM_STORAGE ?= /tmp/chillion
+export VAGRANT_HOME = $(VM_STORAGE)/.vagrant.d
+VBOX_VM_DIR = $(VM_STORAGE)/VirtualBox VMs
 
 # Couleurs pour l'affichage
 RED = \033[0;31m
@@ -155,7 +158,7 @@ p3: check-docker p3-install p3-setup p3-deploy
 	@echo "$(GREEN)✅ Partie 3 lancée avec succès$(NC)"
 
 p3-install:
-	@echo "$(BLUE)� Installation des outils pour la Partie 3...$(NC)"
+	@echo "$(BLUE)Installation des outils pour la Partie 3...$(NC)"
 	cd $(P3_DIR) && ./scripts/install.sh
 
 p3-setup:

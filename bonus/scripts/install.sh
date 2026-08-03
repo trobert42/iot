@@ -22,7 +22,7 @@ if ! command -v kubectl >/dev/null 2>&1; then
     chmod +x kubectl
     sudo mv kubectl /usr/local/bin/
 fi
-echo "[OK] kubectl : $(kubectl version --client --short 2>/dev/null || kubectl version --client)"
+echo "[OK] kubectl : $(kubectl version --client -o yaml 2>/dev/null | awk '/gitVersion/ {print $2; exit}')"
 
 # k3d
 if ! command -v k3d >/dev/null 2>&1; then
@@ -49,11 +49,17 @@ else
 fi
 echo "[OK] Helm : $(helm version --short 2>/dev/null)"
 
-# git (necessaire pour push vers GitLab)
-if ! command -v git >/dev/null 2>&1; then
-    echo "Installation de git..."
-    sudo apt-get update -y && sudo apt-get install -y git
+# git (push vers GitLab) et jq (appels a l'API GitLab dans configure_gitlab.sh)
+MISSING=""
+command -v git >/dev/null 2>&1 || MISSING="$MISSING git"
+command -v jq  >/dev/null 2>&1 || MISSING="$MISSING jq"
+if [ -n "$MISSING" ]; then
+    echo "Installation de :$MISSING"
+    sudo apt-get update -y
+    # shellcheck disable=SC2086
+    sudo apt-get install -y $MISSING
 fi
 echo "[OK] git : $(git --version)"
+echo "[OK] jq  : $(jq --version)"
 
 echo "Installation terminee. Prochaine etape : ./scripts/setup_cluster.sh"
