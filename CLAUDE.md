@@ -2,12 +2,12 @@
 
 ## Project Overview
 
-Inception-of-Things (IoT) — Kubernetes administration project. Documentation in French.
+Inception-of-Things (IoT) - Kubernetes administration project. Documentation in French.
 
-- **p1/**: K3s + Vagrant — 2 VMs (chillionS + chillionSW) on 192.168.56.110-111
-- **p2/**: K3s + 3 web apps — 1 VM, Traefik ingress (app1.com, app2.com, default→app3)
-- **p3/**: K3d + Argo CD — GitOps from GitHub, cluster `iot-cluster`, namespaces: argocd, dev
-- **bonus/**: K3d + GitLab local + Argo CD — GitOps from in-cluster GitLab, cluster `iot-bonus`, namespaces: argocd, dev, gitlab
+- **p1/**: K3s + Vagrant - 2 VMs (chillionS + chillionSW) on 192.168.56.110-111
+- **p2/**: K3s + 3 web apps - 1 VM, Traefik ingress (app1.com, app2.com, default->app3)
+- **p3/**: K3d + Argo CD - GitOps from GitHub, cluster `iot-cluster`, namespaces: argocd, dev
+- **bonus/**: K3d + GitLab local + Argo CD - GitOps from in-cluster GitLab, cluster `iot-bonus`, namespaces: argocd, dev, gitlab
 
 ## Commands (root Makefile)
 
@@ -25,14 +25,14 @@ Each part has `scripts/`, `confs/`, `README.md`. p1/p2 also have `Vagrantfile`.
 
 ## Networking
 
-- p1/p2: VirtualBox 192.168.56.0/24, flannel on enp0s8
-- p3: ports 8080→80, 8443→443, 8888→8888
+- p1/p2: VirtualBox 192.168.56.0/24, flannel iface auto-detected from the node IP
+- p3: ports 8888 -> 80 (Ingress Traefik), 8443 -> 443 ; Argo CD par port-forward 8080:443
 - bonus: same ports, GitLab internal via `gitlab-webservice-default.gitlab.svc.cluster.local:8181`
 
 ## GitOps
 
-- p3: Argo CD → `github.com/BekxFR/trobert-iot-argocd-app.git` → dev namespace
-- bonus: Argo CD → local GitLab `/root/iot-app.git` → dev namespace (HTTP, `insecure: "true"`)
+- p3: Argo CD -> `github.com/BekxFR/trobert-iot-argocd-app.git` -> dev namespace
+- bonus: Argo CD -> local GitLab `/root/iot-app.git` -> dev namespace (HTTP, `insecure: "true"`)
 - App image: `wil42/playground` (v1/v2), port 8888
 
 ## Requirements

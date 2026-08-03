@@ -7,7 +7,7 @@ Ce document détaille tous les points cruciaux des consignes pour s'assurer du r
 ### Objectif général
 - **Nom** : Inception-of-Things (IoT)
 - **Type** : Exercice d'administration système avec Kubernetes
-- **Approche** : Progressive en 3 parties (K3s → Applications → GitOps)
+- **Approche** : Progressive en 3 parties (K3s -> Applications -> GitOps)
 
 ### Structure obligatoire
 ```
@@ -24,7 +24,7 @@ iot/
 
 #### Machines virtuelles
 - **Nombre** : Exactement 2 machines
-- **Distribution** : Version stable la plus récente (Ubuntu 20.04 LTS utilisée)
+- **Distribution** : Version stable la plus récente (Ubuntu 26.04 LTS, box `bento/ubuntu-26.04`)
 - **Ressources minimales** : 
   - 1 CPU par machine
   - 512 MB ou 1024 MB de RAM (1024 MB choisi)
@@ -70,9 +70,9 @@ iot/
 - **Accès** : Via header HOST sur l'IP `192.168.56.110`
 
 #### Routing obligatoire
-- **Host: app1.com** → Application 1
-- **Host: app2.com** → Application 2  
-- **Accès direct IP** → Application 3 (par défaut)
+- **Host: app1.com** -> Application 1
+- **Host: app2.com** -> Application 2  
+- **Accès direct IP** -> Application 3 (par défaut)
 
 #### Configuration spéciale
 - **Application 2** : Doit avoir exactement 3 replicas
@@ -128,7 +128,7 @@ iot/
 - [ ] 2 namespaces créés (argocd + dev)
 - [ ] Repository GitHub public avec login
 - [ ] Application accessible sur port 8888
-- [ ] Test changement v1 → v2 via Git
+- [ ] Test changement v1 -> v2 via Git
 - [ ] Démonstration GitOps pendant l'évaluation
 
 ### Démonstration obligatoire pendant l'évaluation
@@ -212,7 +212,7 @@ find -maxdepth 2 -ls
 - Repository GitHub privé
 - Application non accessible port 8888
 - GitOps non fonctionnel
-- Pas de démonstration v1→v2
+- Pas de démonstration v1->v2
 
 ## Documentation et ressources
 

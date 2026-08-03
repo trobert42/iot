@@ -40,5 +40,5 @@ Scripts d'aide pour la gestion des VMs Vagrant.
 ## Intégration Makefile
 
 Tous ces scripts sont intégrés dans le Makefile principal :
-- `make cleanup-files` → `./Tools/cleanup.sh`
-- `make check` → `./Tools/check_requirements.sh`
+- `make cleanup-files` -> `./Tools/cleanup.sh`
+- `make check` -> `./Tools/check_requirements.sh`

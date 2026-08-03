@@ -17,9 +17,9 @@ Cette partie implémente un cluster K3s avec 3 applications web accessibles via 
 
 L'Ingress Traefik route les requêtes selon l'host :
 
-- `Host: app1.com` → App1
-- `Host: app2.com` → App2
-- Accès direct IP → App3 (par défaut)
+- `Host: app1.com` -> App1
+- `Host: app2.com` -> App2
+- Accès direct IP -> App3 (par défaut)
 
 ## Structure des fichiers
 
@@ -63,7 +63,7 @@ curl -H "Host: app2.com" http://192.168.56.110
 curl http://192.168.56.110
 
 # Script de test automatique
-cd p2 && vagrant ssh chillionS -c "/tmp/confs/../scripts/test_apps.sh"
+cd p2 && vagrant ssh chillionS -c "/vagrant/scripts/test_apps.sh"
 ```
 
 ## Vérification

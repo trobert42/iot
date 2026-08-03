@@ -1,5 +1,9 @@
 # Configuration du Repository GitHub pour GitOps
 
+> **Important** : c'est le dépôt GitHub qui fait foi. Argo CD applique les
+> manifests qu'il y trouve, pas ceux de `p3/confs/`. Toute modification faite
+> dans `p3/confs/` doit être répercutée sur le dépôt, sinon les deux divergent.
+
 ## Instructions pour créer le repository
 
 ### 1. Créer un repository GitHub public
@@ -84,9 +88,9 @@ metadata:
   name: wil-playground-ingress
   namespace: dev
   annotations:
-    kubernetes.io/ingress.class: traefik
     traefik.ingress.kubernetes.io/router.entrypoints: web
 spec:
+  ingressClassName: traefik
   rules:
     - http:
         paths:

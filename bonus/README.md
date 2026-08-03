@@ -39,13 +39,13 @@ Cette partie bonus ajoute un GitLab local au cluster K3d. Argo CD synchronise de
 | **Docker** | Moteur de conteneurs, necessaire pour faire tourner le cluster K3d sur la machine hote |
 | **K3d** | Cree un cluster Kubernetes leger (K3s) a l'interieur de conteneurs Docker, evitant le besoin de VMs |
 | **kubectl** | Client en ligne de commande pour interagir avec l'API Kubernetes (deployer, inspecter, debugger) |
-| **Helm** | Gestionnaire de paquets Kubernetes — permet d'installer GitLab via son chart officiel `gitlab/gitlab` avec un seul fichier de valeurs au lieu de dizaines de manifestes YAML |
+| **Helm** | Gestionnaire de paquets Kubernetes - permet d'installer GitLab via son chart officiel `gitlab/gitlab` avec un seul fichier de valeurs au lieu de dizaines de manifestes YAML |
 | **Argo CD CLI** | Client pour Argo CD, le moteur GitOps qui surveille un repo Git et synchronise automatiquement l'etat du cluster |
-| **git** | Necessaire pour cloner le projet GitLab local, y pousser les manifestes, et effectuer la demo de changement de version (v1 → v2) |
+| **git** | Necessaire pour cloner le projet GitLab local, y pousser les manifestes, et effectuer la demo de changement de version (v1 -> v2) |
 
 ## Prerequis
 
-- Docker (accessible sans sudo — `newgrp docker` si necessaire)
+- Docker (accessible sans sudo - `newgrp docker` si necessaire)
 - ~3 CPU, 6 GB RAM minimum pour GitLab
 
 ## Installation
@@ -60,7 +60,7 @@ make bonus
 make bonus-install    # Installe Helm + outils P3 si absents
 make bonus-setup      # Cree cluster K3d + Argo CD + 3 namespaces
 make bonus-gitlab     # Deploie et configure GitLab (~15 min)
-make bonus-deploy     # Deploie l'app via Argo CD → GitLab local
+make bonus-deploy     # Deploie l'app via Argo CD -> GitLab local
 ```
 
 ### En direct
@@ -93,16 +93,21 @@ Verifie :
 
 ### Application (port 8888)
 
+Le port 8888 de l'hôte est publié sur l'entrypoint HTTP du loadbalancer K3d :
+l'Ingress Traefik expose l'application directement.
+
 ```bash
-kubectl port-forward svc/wil-playground-service -n dev 8888:8888
 curl http://localhost:8888
+
+# Repli si besoin
+kubectl port-forward svc/wil-playground-service -n dev 8888:8888
 ```
 
 ### Argo CD (port 8080)
 
 ```bash
 kubectl port-forward svc/argocd-server -n argocd 8080:443
-# URL: http://localhost:8080
+# URL: https://localhost:8080
 # Username: admin
 # Password: kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
 ```
@@ -116,7 +121,7 @@ kubectl port-forward svc/gitlab-webservice-default -n gitlab 30080:8181
 # Password: kubectl get secret gitlab-gitlab-initial-root-password -n gitlab -o jsonpath='{.data.password}' | base64 -d
 ```
 
-## Demonstration GitOps v1 → v2
+## Demonstration GitOps v1 -> v2
 
 1. **Port-forward vers GitLab** :
    ```bash
@@ -138,18 +143,17 @@ kubectl port-forward svc/gitlab-webservice-default -n gitlab 30080:8181
 
 4. **Verifier** (Argo CD synchronise en ~3 min) :
    ```bash
-   kubectl port-forward svc/wil-playground-service -n dev 8888:8888 &
    curl http://localhost:8888
-   # → v2
+   # -> v2
    ```
 
 ## Flux GitOps
 
 ```
 Utilisateur push vers GitLab local
-  → Argo CD detecte le changement (polling ~3 min)
-    → Argo CD synchronise les manifestes
-      → Kubernetes deploie la nouvelle version dans dev
+  -> Argo CD detecte le changement (polling ~3 min)
+    -> Argo CD synchronise les manifestes
+      -> Kubernetes deploie la nouvelle version dans dev
 ```
 
 ## Differences avec la Partie 3
@@ -168,7 +172,7 @@ Le chart Helm est configure avec des parametres minimaux (`confs/gitlab-values.y
 - Pas de certmanager, nginx-ingress, prometheus, runner, registry, KAS, pages
 - Replicas reduites a 1
 - HTTP uniquement (pas de TLS)
-- Communication Argo CD → GitLab via DNS interne Kubernetes
+- Communication Argo CD -> GitLab via DNS interne Kubernetes
 
 ## Nettoyage
 
@@ -187,12 +191,12 @@ bonus/
 │   ├── setup_cluster.sh        # Cree cluster K3d + Argo CD + 3 namespaces
 │   ├── deploy_gitlab.sh        # Deploie GitLab via Helm chart officiel
 │   ├── configure_gitlab.sh     # Cree projet GitLab, push manifestes, enregistre repo dans Argo CD
-│   ├── deploy_app.sh           # Applique application.yaml Argo CD → GitLab local
+│   ├── deploy_app.sh           # Applique application.yaml Argo CD -> GitLab local
 │   ├── test.sh                 # Verifie tout (GitLab, Argo CD, app, GitOps)
 │   └── cleanup.sh              # Supprime cluster + nettoyage
 └── confs/
     ├── gitlab-values.yaml      # Helm values minimaux pour GitLab
-    ├── application.yaml        # Argo CD Application → GitLab local
+    ├── application.yaml        # Argo CD Application -> GitLab local
     ├── deployment.yaml         # Manifeste Kubernetes (wil42/playground:v1)
     ├── service.yaml            # Service ClusterIP port 8888
     └── ingress.yaml            # Ingress Traefik

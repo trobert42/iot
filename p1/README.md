@@ -44,9 +44,8 @@ Cette partie met en place un cluster Kubernetes K3s distribué sur 2 machines vi
 
 4. **SSH sans mot de passe** :
 
-   - Clé privée Vagrant copiée
-   - Configuration SSH automatique
-   - StrictHostKeyChecking désactivé
+   - Clé générée par Vagrant, insérée automatiquement dans chaque VM
+   - `vagrant ssh chillionS` / `vagrant ssh chillionSW` sans mot de passe
 
 5. **K3s Installation** :
 
@@ -55,7 +54,7 @@ Cette partie met en place un cluster Kubernetes K3s distribué sur 2 machines vi
    - kubectl installé et configuré
 
 6. **Distribution** :
-   - Ubuntu 20.04 LTS (focal64) - version stable
+   - Ubuntu 26.04 LTS (`bento/ubuntu-26.04`) - dernière version stable
 
 ## Structure des fichiers
 
@@ -65,7 +64,7 @@ p1/
 ├── scripts/
 │   ├── install_k3s_server.sh    # Installation K3s controller
 │   └── install_k3s_agent.sh     # Installation K3s agent
-└── confs/                        # Dossier configurations (vide pour P1)
+└── confs/                        # node-token publié par le server (ignoré par git)
 ```
 
 ## Installation et déploiement
@@ -127,8 +126,8 @@ kubectl cluster-info
 ```bash
 $ kubectl get nodes -o wide
 NAME        STATUS   ROLES                  AGE   VERSION        INTERNAL-IP       EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION      CONTAINER-RUNTIME
-chillions   Ready    control-plane,master   2m    v1.28.x+k3s1   192.168.56.110   <none>        Ubuntu 20.04.x LTS   5.4.0-x-generic    containerd://1.7.x-k3s1
-chillionsw  Ready    <none>                 1m    v1.28.x+k3s1   192.168.56.111   <none>        Ubuntu 20.04.x LTS   5.4.0-x-generic    containerd://1.7.x-k3s1
+chillions   Ready    control-plane,master   2m    v1.3x.x+k3s1   192.168.56.110   <none>        Ubuntu 26.04 LTS   6.x-generic    containerd://2.x-k3s1
+chillionsw  Ready    <none>                 1m    v1.3x.x+k3s1   192.168.56.111   <none>        Ubuntu 26.04 LTS   6.x-generic    containerd://2.x-k3s1
 ```
 
 ## Fonctionnalités techniques
@@ -191,15 +190,16 @@ vagrant ssh chillionSW -c "sudo systemctl status k3s-agent"
 
 ### Configuration SSH
 
-- Utilisation de la clé privée Vagrant standard
-- SSH configuré pour ignorer la vérification d'hôte
-- Permissions appropriées sur les clés (600)
+- Clé SSH générée par Vagrant et insérée à la création de chaque VM
+  (pas de clé « insecure » partagée entre les machines)
+- Connexion sans mot de passe via `vagrant ssh`
 
 ### Token K3s
 
-- Token généré automatiquement par le serveur
-- Permissions ajustées (644) pour permettre la lecture par l'agent
-- Transmission sécurisée via SSH
+- Token généré par le serveur K3s à l'installation
+- Publié dans `/vagrant/confs/node-token` (dossier synchronisé, ignoré par git)
+- Lu par l'agent au provisionnement : aucun secret en dur, aucun canal SSH
+  inter-VM à maintenir
 
 ### Firewall
 

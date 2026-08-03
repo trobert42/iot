@@ -1,101 +1,102 @@
-# Analyse de conformité — Inception-of-Things
+# Analyse de conformite - Inception-of-Things
 
-Date: 2026-02-25
-Référence: Docs/iot.en.subject.txt (v4.0)
+Date: 2026-08-03
+Reference: Docs/iot.en.subject.pdf (v4.0)
 
-## Partie 1 : K3s et Vagrant — CONFORME
+## Partie 1 : K3s et Vagrant - CONFORME
 
 - [x] 2 machines via Vagrant (chillionS + chillionSW)
-- [x] Hostnames = login + S / SW
+- [x] Hostnames = login + S / SW, noms VirtualBox identiques
 - [x] IPs : 192.168.56.110 (server), 192.168.56.111 (worker)
-- [x] SSH sans mot de passe (insecure_private_key)
+- [x] Derniere version stable de la distribution : Ubuntu 26.04 LTS (`bento/ubuntu-26.04`)
+- [x] SSH sans mot de passe (cle generee et inseree par Vagrant)
 - [x] 1 CPU, 1024 MB RAM
 - [x] K3s server en mode controller
 - [x] K3s agent en mode agent
-- [x] kubectl installé et configuré
-- [x] Dossier `p1/confs/` présent
+- [x] kubectl installe et configure
+- [x] Dossier `p1/confs/` present (recoit le node-token publie par le server)
 
-## Partie 2 : K3s et 3 applications — CONFORME
+## Partie 2 : K3s et 3 applications - CONFORME
 
-- [x] 1 seule VM (chillionS), IP 192.168.56.110
+- [x] 1 seule VM (chillionS), IP 192.168.56.110, Ubuntu 26.04 LTS
+- [x] K3s en mode server
 - [x] 3 applications web (app1, app2, app3)
-- [x] Routage HOST : app1.com → app1, app2.com → app2, défaut → app3
+- [x] Routage HOST : app1.com -> app1, app2.com -> app2, defaut -> app3
 - [x] app2 avec 3 replicas
-- [x] Ingress Traefik configuré
-- [x] Dossiers `scripts/` et `confs/` présents
+- [x] Ingress Traefik avec `ingressClassName: traefik`
+- [x] Dossiers `scripts/` et `confs/` presents
 
-## Partie 3 : K3d et Argo CD — CONFORME
+## Partie 3 : K3d et Argo CD - CONFORME
 
-- [x] K3d installé (pas Vagrant)
-- [x] Script d'installation complet (Docker, kubectl, K3d, Argo CD CLI)
+- [x] K3d installe (pas de Vagrant)
+- [x] Script d'installation complet (Docker, kubectl, K3d, Argo CD CLI), Debian et Ubuntu
 - [x] 2 namespaces : argocd + dev
-- [x] Argo CD installé dans namespace argocd
-- [x] App dans namespace dev
-- [x] Repo GitHub avec login dans le nom (BekxFR/trobert-iot-argocd-app)
+- [x] Argo CD installe dans le namespace argocd
+- [x] Application deployee dans le namespace dev
+- [x] Repo GitHub public avec le login d'un membre du groupe (BekxFR/trobert-iot-argocd-app)
 - [x] Image wil42/playground avec versions v1 et v2
-- [x] Port 8888 configuré
+- [x] Application accessible sur http://localhost:8888 (port hote 8888 -> entrypoint HTTP du loadbalancer K3d -> Ingress Traefik)
 - [x] application.yaml avec syncPolicy automated (prune + selfHeal)
-- [x] `deploy_app.sh` applique `application.yaml` (Argo CD Application) — déploiement GitOps
 - [x] Argo CD synchronise automatiquement depuis le repo GitHub
 
-## Bonus : GitLab local sur K3d — CONFORME
+## Bonus : GitLab local sur K3d - CONFORME
 
 - [x] GitLab deploye dans le cluster K3d (namespace gitlab)
-- [x] Helm chart officiel gitlab/gitlab avec configuration minimale
+- [x] Helm chart officiel gitlab/gitlab, derniere version disponible
 - [x] 3 namespaces : argocd, dev, gitlab
-- [x] Argo CD synchronise depuis GitLab local (pas GitHub)
+- [x] Argo CD synchronise depuis le GitLab local (pas GitHub)
 - [x] URL interne : http://gitlab-webservice-default.gitlab.svc.cluster.local:8181
-- [x] Application wil42/playground dans namespace dev
-- [x] Port 8888 configure
+- [x] Application wil42/playground dans le namespace dev, port 8888
 - [x] Repo secret Argo CD avec insecure: "true" (pas de TLS)
 - [x] Scripts automatises : install, setup, deploy_gitlab, configure_gitlab, deploy_app, test, cleanup
-- [x] GitOps v1 → v2 demontrable via GitLab local
-- [x] Makefile avec targets bonus (bonus, bonus-install, bonus-setup, bonus-gitlab, bonus-deploy, bonus-test, bonus-clean)
+- [x] GitOps v1 -> v2 demontrable via le GitLab local
+- [x] Makefile avec cibles bonus
 
 ## Structure globale
 
-- [x] Dossiers p1/, p2/, p3/, bonus/ à la racine
+- [x] Dossiers p1/, p2/, p3/, bonus/ a la racine
 - [x] Scripts dans scripts/
 - [x] Configs dans confs/ (y compris p1)
-- [x] Dossier bonus/ present avec GitLab local
 
 ---
 
-## Corrections effectuées
+## Points de vigilance pour la soutenance
 
-### 1. Créer `p1/confs/` — FAIT
+### 1. Le depot GitHub fait foi pour la partie 3
 
-Dossier créé avec `.gitkeep` pour respecter l'arborescence attendue par le sujet.
+Argo CD applique les manifests du depot `BekxFR/trobert-iot-argocd-app`, pas
+ceux de `p3/confs/`. Toute modification locale doit y etre repercutee.
 
-### 2. Corriger `p3/scripts/deploy_app.sh` — FAIT
+### 2. Demonstration du changement de version
 
-Le script applique désormais `confs/application.yaml` (la ressource Argo CD Application).
-Argo CD synchronise et déploie automatiquement depuis le repo GitHub.
+1. `curl http://localhost:8888` -> v1
+2. Modifier deployment.yaml dans le depot : v1 -> v2
+3. `git push`
+4. Argo CD synchronise automatiquement (sync auto toutes les 3 minutes,
+   ou bouton REFRESH / `argocd app sync` pour ne pas attendre)
+5. `curl http://localhost:8888` -> v2
 
-Le flux GitOps :
+### 3. Acces a l'interface Argo CD
+
+Le service `argocd-server` reste en ClusterIP. Un service de type LoadBalancer
+entrerait en conflit avec Traefik, qui occupe deja les ports 80 et 443 des
+nodes. L'acces se fait par port-forward :
 
 ```
-kubectl apply -f confs/application.yaml
-  → Argo CD lit le repo GitHub
-    → Argo CD déploie automatiquement dans le namespace dev
+kubectl port-forward svc/argocd-server -n argocd 8080:443
 ```
 
-### 3. Repo GitHub vérifié — FAIT
+### 4. Stockage des VM Vagrant
 
-Le repo `github.com/BekxFR/trobert-iot-argocd-app` contient :
+Par defaut le Makefile stocke les box et les disques dans `/tmp/chillion`.
+Si `/tmp` est monte en tmpfs (RAM) ou trop petit sur la machine d'evaluation :
 
-- deployment.yaml (wil42/playground:v1)
-- service.yaml
-- ingress.yaml
+```
+make VM_STORAGE=$HOME/iot-vms p1
+```
 
-Contenu identique aux fichiers dans `p3/confs/` (sans application.yaml qui reste local).
+### 5. Virtualisation imbriquee
 
-### 4. Démonstration de changement de version (évaluation)
-
-Pendant la soutenance il faut montrer :
-
-1. `curl localhost:8888` → v1
-2. Modifier deployment.yaml dans le repo GitHub : v1 → v2
-3. Git push
-4. Argo CD synchronise automatiquement
-5. `curl localhost:8888` → v2
+Les parties 1 et 2 lancent des VM VirtualBox a l'interieur de la VM
+d'evaluation : VT-x / AMD-V doit y etre expose. `Tools/VM_commands.sh` le
+verifie et le signale.

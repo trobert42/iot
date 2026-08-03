@@ -55,7 +55,7 @@ p3/
 
 ### Prérequis
 
-- Ubuntu 20.04+ (ou distribution compatible)
+- Debian 12+ ou Ubuntu 22.04+ (le script d'installation gère les deux)
 - Accès internet
 - Droits administrateur (sudo)
 
@@ -120,19 +120,21 @@ Argo CD surveille le repo et synchronise automatiquement tout changement vers le
 
 ### Application (wil42/playground)
 
-```bash
-# Port-forward
-kubectl port-forward svc/wil-playground-service -n dev 8888:8888
+Le cluster K3d publie le port 8888 de l'hôte sur l'entrypoint HTTP du
+loadbalancer : l'Ingress Traefik expose donc l'application directement.
 
-# Test
+```bash
 curl http://localhost:8888
 # Réponse: {"status":"ok", "message": "v1"} ou "v2"
+
+# Repli si besoin
+kubectl port-forward svc/wil-playground-service -n dev 8888:8888
 ```
 
 ### Argo CD Interface
 
 ```bash
-# Port-forward
+# Le service argocd-server reste en ClusterIP : accès par port-forward
 kubectl port-forward svc/argocd-server -n argocd 8080:443
 
 # Accès: https://localhost:8080
@@ -142,7 +144,7 @@ kubectl port-forward svc/argocd-server -n argocd 8080:443
 
 ## Test du GitOps
 
-### Changement de version v1 → v2
+### Changement de version v1 -> v2
 
 ```bash
 # Dans votre repository GitHub
