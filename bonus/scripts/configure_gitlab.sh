@@ -38,10 +38,15 @@ PF_PID=$!
 sleep 5
 
 # Fonction de nettoyage
+# WORKDIR (et non TMPDIR, variable d'environnement standard) : un exit avant
+# mktemp aurait sinon supprime le repertoire temporaire du systeme.
+WORKDIR=""
 cleanup() {
     echo "Nettoyage..."
     kill $PF_PID 2>/dev/null || true
-    rm -rf "$TMPDIR" 2>/dev/null || true
+    if [ -n "$WORKDIR" ] && [ -d "$WORKDIR" ]; then
+        rm -rf "$WORKDIR"
+    fi
 }
 trap cleanup EXIT
 
@@ -117,8 +122,8 @@ fi
 
 # 6. Cloner, copier les manifestes, push vers GitLab
 echo "Push des manifestes vers GitLab..."
-TMPDIR=$(mktemp -d)
-cd "$TMPDIR"
+WORKDIR=$(mktemp -d)
+cd "$WORKDIR"
 
 git init
 git config user.email "root@gitlab.local"
@@ -141,9 +146,8 @@ fi
 
 git remote add origin "$GIT_URL"
 git branch -M main
-git push -u origin main
 
-if [ $? -eq 0 ]; then
+if git push -u origin main; then
     echo "[OK] Manifestes pushes vers GitLab"
 else
     echo "[FAIL] Erreur lors du push vers GitLab"
